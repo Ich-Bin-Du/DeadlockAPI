@@ -6,7 +6,7 @@ import java.net.http.HttpResponse;
 public class DeadlockApi {
     public static void main(String[] args) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
-        int playerId = 76561198409704433;
+        long playerId = 76561198409704433L;
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("https://api.deadlock-api.com/v1/players/" + playerId + "/match-history"))
