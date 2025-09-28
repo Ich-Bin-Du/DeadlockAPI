@@ -10,13 +10,13 @@ public class dataFile {
     static void createFile(String name) {
         try {
             File file = new File("Files\\" + name + ".txt"); // Create File object
-            if (file.createNewFile()) {           // Try to create the file
+            if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             } else {
                 System.out.println("File already exists.");
             }
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred, while making the file.");
             e.printStackTrace();
         }
     }
@@ -27,7 +27,7 @@ public class dataFile {
                 myWriter.close();  // must close manually
                 System.out.println("Successfully wrote to the file.");
             } catch (IOException e) {
-                System.out.println("An error occurred.");
+                System.out.println("An error occurred, while writing to the File.");
                 e.printStackTrace();
             }
     }
@@ -41,7 +41,7 @@ public class dataFile {
                 System.out.println(data);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred, while reading the File");
             e.printStackTrace();
         }
     }
@@ -54,9 +54,9 @@ public class dataFile {
         try (Scanner myReader = new Scanner(myObj)) {
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                if (data.equals("        \"match_result\": 0,"))
+                if (data.equals("\"match_result\": 0,"))
                     wins++;
-                else if (data.equals("        \"match_result\": 1,")) {
+                else if (data.equals("\"match_result\": 1,")) {
                     losses++;
                 }
             }
@@ -65,7 +65,7 @@ public class dataFile {
             System.out.println("Losses: " + losses);
             System.out.println("Winrate: " + winrate);
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            System.out.println("An error occurred, while Reading your match results.");
             e.printStackTrace();
         }
     }

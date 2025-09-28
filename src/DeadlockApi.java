@@ -24,5 +24,7 @@ public class DeadlockApi {
         dataFile.writeFile(fileName, fileText);
         dataFile.readMatchResult(fileName);
 
+        window.openWindow(500,500,"DeadlockAPI");
+
     }
 }
