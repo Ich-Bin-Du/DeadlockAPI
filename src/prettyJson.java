@@ -1,7 +1,6 @@
 public class prettyJson {
     public static String prettyPrintJson(String json) {
         StringBuilder pretty = new StringBuilder();
-        int indentLevel = 0;
         boolean inQuotes = false;
 
         for (int i = 0; i < json.length(); i++) {
@@ -9,7 +8,6 @@ public class prettyJson {
 
             switch (c) {
                 case '"':
-                    // toggle quote flag when not escaped
                     if (i > 0 && json.charAt(i - 1) != '\\') {
                         inQuotes = !inQuotes;
                     }
@@ -21,8 +19,6 @@ public class prettyJson {
                     pretty.append(c);
                     if (!inQuotes) {
                         pretty.append("\n");
-                        indentLevel++;
-                        appendIndent(pretty, indentLevel);
                     }
                     break;
 
@@ -30,8 +26,6 @@ public class prettyJson {
                 case ']':
                     if (!inQuotes) {
                         pretty.append("\n");
-                        indentLevel--;
-                        appendIndent(pretty, indentLevel);
                         pretty.append(c);
                     } else {
                         pretty.append(c);
@@ -42,7 +36,6 @@ public class prettyJson {
                     pretty.append(c);
                     if (!inQuotes) {
                         pretty.append("\n");
-                        appendIndent(pretty, indentLevel);
                     }
                     break;
 
@@ -59,10 +52,4 @@ public class prettyJson {
 
         return pretty.toString();
     }
-
-    private static void appendIndent(StringBuilder sb, int indentLevel) {
-        for (int i = 0; i < indentLevel; i++) {
-            sb.append("    "); // 4 spaces per indent
-        }
-    }
-}
+ }
