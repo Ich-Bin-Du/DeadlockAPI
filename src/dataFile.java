@@ -2,7 +2,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
+
+import static java.lang.System.*;
 
 public class dataFile {
 
@@ -11,12 +14,12 @@ public class dataFile {
         try {
             File file = new File("Files\\" + name + ".txt"); // Create File object
             if (file.createNewFile()) {
-                System.out.println("File created: " + file.getName());
+                out.println("File created: " + file.getName());
             } else {
-                System.out.println("File already exists.");
+                out.println("File already exists.");
             }
         } catch (IOException e) {
-            System.out.println("An error occurred, while making the file.");
+            out.println("An error occurred, while making the file.");
             e.printStackTrace();
         }
     }
@@ -25,51 +28,84 @@ public class dataFile {
                 FileWriter myWriter = new FileWriter("Files\\" + name + ".txt");
                 myWriter.write(text);
                 myWriter.close();  // must close manually
-                System.out.println("Successfully wrote to the file.");
+                out.println("Successfully wrote to the file.");
             } catch (IOException e) {
-                System.out.println("An error occurred, while writing to the File.");
+                out.println("An error occurred, while writing to the File.");
                 e.printStackTrace();
             }
     }
 
-    static void readFile(String name){
+    static void readFile(String name){ //Template function maybe for later use, probably not
         File myObj = new File("Files\\" + name + ".txt");
 
         try (Scanner myReader = new Scanner(myObj)) {
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
-                System.out.println(data);
+                out.println(data);
             }
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred, while reading the File");
+            out.println("An error occurred, while reading the File");
             e.printStackTrace();
         }
     }
 
-    static void readMatchResult(String name){
+    static void readMatchData(String name){
         File myObj = new File("Files\\" + name + ".txt");
-        int wins = 0;
-        int losses = 0;
+        int matchId = 0;
+        int heroLevel = 0;
+        int kills = 0;
+        int deaths = 0;
+        int assists = 0;
+        long startTime;
+        Date date = null;
+        String[] heroes = {"Infernus", };
+        boolean looping = true;
 
         try (Scanner myReader = new Scanner(myObj)) {
-            while (myReader.hasNextLine()) {
+            while (looping) {
                 String data = myReader.nextLine();
-                if (data.equals("\"match_result\": 0,"))
-                    wins++;
-                else if (data.equals("\"match_result\": 1,")) {
-                    losses++;
-                }
+                //while (looping){
+                    switch(data) { // gets all match Data
+                        case String s when s.contains("match_id") -> {
+                            matchId = Integer.parseInt(data.replaceAll("\\D", ""));
+                        }
+                        case String s when s.contains("hero_level") -> {
+                            heroLevel = Integer.parseInt(data.replaceAll("\\D", ""));
+                        }
+                        case String s when s.contains("kills") -> {
+                            kills = Integer.parseInt(data.replaceAll("\\D", ""));
+                        }
+                        case String s when s.contains("deaths") -> {
+                            deaths = Integer.parseInt(data.replaceAll("\\D", ""));
+                        }
+                        case String s when s.contains("assists") -> {
+                            assists = Integer.parseInt(data.replaceAll("\\D", ""));
+                        }
+                        case String s when s.contains("start_time") ->{
+                            startTime = Long.parseLong(data.replaceAll("\\D", ""));
+                            date = new Date(startTime*1000L);
+                        }
+                        case String s when s.contains("}") -> {
+                            looping = false;
+
+                        }
+
+                        default -> out.print("");
+
+                    }
+                //}
             }
-            double winrate = (double) Math.round(((double) wins / (double) losses) * 100) / 100;
-            System.out.println("Wins: " + wins);
-            System.out.println("Losses: " + losses);
-            System.out.println("Winrate: " + winrate);
+            out.println(date);
+            out.println(matchId);
+            out.println("Kills: " + kills);
+            out.println("Deaths: " + deaths);
+            out.println("Assists: " + assists);
+            out.println("Hero Level: " + heroLevel);
+
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred, while Reading your match results.");
+            out.println("An error occurred, while Reading your match results.");
             e.printStackTrace();
         }
     }
-
-
 }
 
